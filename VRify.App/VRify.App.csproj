@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\VRify.Core\VRify.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Depth-estimation ONNX models: bundled with the app so FindModel() finds them
+       next to the executable. Copy if newer so a rebuild picks up new model files. -->
+  <ItemGroup>
+    <Content Include="..\models\model.onnx" Link="model.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\models\model_fp16.onnx" Link="model_fp16.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>
