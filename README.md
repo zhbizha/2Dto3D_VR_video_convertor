@@ -18,6 +18,44 @@ equirectangular (or packs as flat SBS).
 - **Drag & drop**, last-used file paths, remembered window placement
 - **Light/dark UI**, presets, progress with ETA
 
+## What this is — and what it isn't
+
+VRify synthesises a second eye by estimating per-frame depth with a neural net
+(Depth-Anything ONNX) and forward-warping the right view. It is **not** true 3D
+capture. The "depth" is a guess from a single 2D image, so the resulting stereo
+is only as good as the source.
+
+**You will see clear 3D** when the source has:
+* Subject(s) clearly in front of the background (people close to camera, objects
+  in foreground, etc.)
+* Sharp edges, good lighting, low compression artefacts
+* A close-to-reality camera (handheld, action camera, music video, vlog)
+
+**You will see little or no 3D** when the source is:
+* **Cinematic 2.35:1 with shallow depth of field and all subjects on a single
+  focus plane** (most modern films, TV series). Directors deliberately compress
+  depth so a single 2D image looks good on a cinema screen — the neural net
+  sees everything at roughly the same depth and the second eye ends up nearly
+  identical to the first.
+* **Low resolution** (≤ 720p SD, especially with letterboxing). Depth-Anything
+  is trained on 1024×1024-ish inputs; SD sources produce flat depth maps.
+* **Heavy compression** (MPEG-4/Xvid at low bitrate, lots of block artefacts).
+  The net reads artefacts as texture and tends to assign uniform depth.
+* **Animation / CGI with non-physical lighting** — depth estimation can be
+  reasonable for hand-drawn 2D animation but unreliable for stylised 3D.
+
+If you preview the first frame and don't see clear left/right eye separation,
+the source simply doesn't have enough depth information to extract — the
+output will look "flat in 3D". Increase the strength slider to 4–6% for a
+small improvement at the cost of more halos around silhouettes, but don't
+expect miracles on inherently flat material.
+
+**Recommended source formats for best results:**
+* 1920×1080 (or higher) progressive 24/30/60 fps
+* H.264 / H.265 / VP9, reasonable bitrate (≥ 5 Mbps for 1080p)
+* Real-world footage: vlogs, music videos, nature documentaries,
+  POV/action camera, older pre-2010 films with deeper staging
+
 ## Installation
 
 Download the latest installer from the [Releases](../../releases) page.

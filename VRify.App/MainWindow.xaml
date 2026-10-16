@@ -39,14 +39,86 @@
             <Setter Property="BorderBrush" Value="#45475A"/>
             <Setter Property="Margin" Value="0,0,0,8"/>
         </Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#2A2A3C"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="BorderBrush" Value="#45475A"/>
+            <Setter Property="Padding" Value="6,3"/>
+        </Style>
+        <!--
+            ComboBox: the built-in Aero/Generic template ignores our Background/Foreground
+            setters on the closed-state TextBlock, leaving it dark text on dark background.
+            We override the template with one that explicitly binds the inner TextBlock
+            to the control's Foreground, and styles the toggle border + dropdown popup
+            to fit the dark theme. Looks identical to a default ComboBox in normal use,
+            but the selected text is now readable.
+        -->
         <Style TargetType="ComboBox">
             <Setter Property="Background" Value="#2A2A3C"/>
             <Setter Property="Foreground" Value="#CDD6F4"/>
             <Setter Property="BorderBrush" Value="#45475A"/>
-        </Style>
-        <Style TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="#2A2A3C"/>
-            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1" CornerRadius="2">
+                                <Grid>
+                                    <ToggleButton x:Name="ToggleButton"
+                                                  Focusable="False"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ClickMode="Press">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Border Background="Transparent">
+                                                    <Path x:Name="Arrow"
+                                                          Fill="{TemplateBinding Foreground}"
+                                                          HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                          Margin="0,0,6,0"
+                                                          Data="M 0,0 L 4,4 L 8,0 Z"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                    <ContentPresenter x:Name="ContentSite"
+                                                      IsHitTestVisible="False"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                      Margin="6,3,20,3"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      TextBlock.Foreground="{TemplateBinding Foreground}"
+                                                      RecognizesAccessKey="True"/>
+                                </Grid>
+                            </Border>
+                            <Popup x:Name="Popup"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   Focusable="False"
+                                   AllowsTransparency="True"
+                                   PopupAnimation="Slide">
+                                <Grid x:Name="DropDown"
+                                      SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder"
+                                            Background="#1E1E2E"
+                                            BorderBrush="#45475A"
+                                            BorderThickness="1" CornerRadius="2">
+                                        <ScrollViewer Margin="2" SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 

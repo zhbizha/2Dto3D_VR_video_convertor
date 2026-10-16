@@ -9,6 +9,7 @@
 // name (Russian in Strings.resx, English in Strings.en.resx), then add a
 // matching property here.
 
+#nullable enable
 using System.Globalization;
 using System.Resources;
 using System.Threading;
