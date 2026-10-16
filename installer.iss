@@ -41,8 +41,13 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 VersionInfoVersion={#MyAppVersion}
 MinVersion=10.0
+; Always show the language picker (default is 'auto' which may skip it on single-language systems).
+ShowLanguageDialog=yes
+LanguageDetectionMethod=uilanguage
 
 [Languages]
+; First entry is the default. We list English first so the dialog opens on a neutral
+; language even if Windows locale is something other than English/Russian.
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
@@ -73,13 +78,21 @@ Type: filesandordirs; Name: "{app}\models"
 { Download the ONNX models zip from the GitHub release and extract it into
   {app}\models\. If models are already present (re-install or manual copy)
   the download is skipped. Runs *after* files are installed so the destination
-  directory exists with write access. }
+  directory exists with write access.
+
+  Messages are localised based on the user-chosen installer language. }
 const
   ModelsUrl = '{#ModelsUrl}';
 
 function ShouldFetchModels(): Boolean;
 begin
   Result := not FileExists(ExpandConstant('{app}\models\model.onnx'));
+end;
+
+function L(const En, Ru: String): String;
+begin
+  if ActiveLanguage = 'russian' then Result := Ru
+  else                                  Result := En;
 end;
 
 procedure FetchAndExtractModels();
@@ -104,10 +117,15 @@ begin
   Log(Format('Downloading models from %s to %s', [ModelsUrl, ZipPath]));
   if not URLDownloadToFile(nil, ModelsUrl, ZipPath, 0, nil) then
   begin
-    MsgBox('Не удалось скачать модели нейронной сети из GitHub. ' +
-           'Приложение запустится, но конвертация потребует файл model.onnx. ' +
-           'Скачайте models.zip из раздела Releases и распакуйте в папку установки\models.',
-           mbError, MB_OK);
+    MsgBox(
+      L('Could not download the neural network models from GitHub. ' +
+        'The app will start, but conversion will need model.onnx. ' +
+        'Download models.zip from the Releases page and unpack it into the ' +
+        'install folder\models\.',
+        'Не удалось скачать модели нейронной сети из GitHub. ' +
+        'Приложение запустится, но конвертация потребует файл model.onnx. ' +
+        'Скачайте models.zip из раздела Releases и распакуйте в папку установки\models.'),
+      mbError, MB_OK);
     exit;
   end;
 
@@ -120,9 +138,12 @@ begin
     [ZipPath, ModelsDir]);
   if not Exec('powershell.exe', Cmd, '', SW_HIDE, ewWaitUntilTerminated, ExitCode) then
   begin
-    MsgBox('Не удалось распаковать архив моделей. Скачайте models.zip из ' +
-           'Releases вручную и распакуйте в ' + ModelsDir + '.',
-           mbError, MB_OK);
+    MsgBox(
+      L('Could not unpack the models archive. Download models.zip from ' +
+        'Releases manually and unpack it into ' + ModelsDir + '.',
+        'Не удалось распаковать архив моделей. Скачайте models.zip из ' +
+        'Releases вручную и распакуйте в ' + ModelsDir + '.'),
+      mbError, MB_OK);
     exit;
   end;
 

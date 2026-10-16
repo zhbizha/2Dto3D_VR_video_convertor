@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="WindowTitle" xml:space="preserve">
+    <value>VRify — 2D → VR SBS 180</value>
+  </data>
+  <data name="GroupFiles" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="LblInput" xml:space="preserve">
+    <value>Input:</value>
+  </data>
+  <data name="LblOutput" xml:space="preserve">
+    <value>Output:</value>
+  </data>
+  <data name="BtnBrowse" xml:space="preserve">
+    <value>Browse…</value>
+  </data>
+  <data name="GroupStereo" xml:space="preserve">
+    <value>Stereo settings</value>
+  </data>
+  <data name="LblStrength" xml:space="preserve">
+    <value>Depth strength:</value>
+  </data>
+  <data name="LblSmoothing" xml:space="preserve">
+    <value>Temporal smoothing:</value>
+  </data>
+  <data name="LblSmoothingHint" xml:space="preserve">
+    <value>(anti-flicker, 0 = maximum stereo)</value>
+  </data>
+  <data name="ChkHevc" xml:space="preserve">
+    <value>HEVC (H.265)</value>
+  </data>
+  <data name="PresetSoft" xml:space="preserve">
+    <value>Soft</value>
+  </data>
+  <data name="PresetNormal" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="PresetStrong" xml:space="preserve">
+    <value>Strong</value>
+  </data>
+  <data name="GroupProjection" xml:space="preserve">
+    <value>Projection</value>
+  </data>
+  <data name="LblFormat" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="OptFlatSbs" xml:space="preserve">
+    <value>Flat SBS (screen)</value>
+  </data>
+  <data name="OptVr180" xml:space="preserve">
+    <value>VR180 equirect (headset)</value>
+  </data>
+  <data name="LblScreenFov" xml:space="preserve">
+    <value>Screen:</value>
+  </data>
+  <data name="LblFovHint" xml:space="preserve">
+    <value>(virtual screen field of view)</value>
+  </data>
+  <data name="InfoNoFile" xml:space="preserve">
+    <value>Drop a video file into the window&#x0a;or click 'Browse…' above</value>
+  </data>
+  <data name="BtnPreview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="BtnOpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="BtnConvert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="BtnCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="StatusReady" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="StatusLoadingModel" xml:space="preserve">
+    <value>Loading depth model…</value>
+  </data>
+  <data name="StatusModelLoaded" xml:space="preserve">
+    <value>Model loaded ({0})</value>
+  </data>
+  <data name="StatusPreview" xml:space="preserve">
+    <value>Generating preview (first frame)…</value>
+  </data>
+  <data name="StatusPreviewReadyVr180" xml:space="preserve">
+    <value>VR180 preview ready — {0}×{1}</value>
+  </data>
+  <data name="StatusPreviewReadyFlat" xml:space="preserve">
+    <value>Preview ready — {0}×{1} (left = original, right = synthesized)</value>
+  </data>
+  <data name="StatusConverting" xml:space="preserve">
+    <value>Converting…</value>
+  </data>
+  <data name="StatusFrameProgress" xml:space="preserve">
+    <value>Frame {0}/{1} • {2:0.0}% • {3:0.0} fps</value>
+  </data>
+  <data name="StatusFrameProgressExtra" xml:space="preserve">
+    <value>Frame {0}/{1} • {2:0.0}% • {3:0.0} fps • elapsed {4} • remaining {5}</value>
+  </data>
+  <data name="StatusDone" xml:space="preserve">
+    <value>Done in {0}: {1}</value>
+  </data>
+  <data name="StatusCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="StatusError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="StatusNoFileToOpen" xml:space="preserve">
+    <value>No file to open</value>
+  </data>
+  <data name="LoadedFile" xml:space="preserve">
+    <value>Loaded: {0}</value>
+  </data>
+  <data name="OpenFolderError" xml:space="preserve">
+    <value>Could not open Explorer</value>
+  </data>
+  <data name="PreviewError" xml:space="preserve">
+    <value>Preview error</value>
+  </data>
+  <data name="ConvertError" xml:space="preserve">
+    <value>Convert error</value>
+  </data>
+  <data name="FirstFrameReadError" xml:space="preserve">
+    <value>Could not read the first frame</value>
+  </data>
+  <data name="GroupLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LblLanguage" xml:space="preserve">
+    <value>Interface:</value>
+  </data>
+  <data name="OptLangAuto" xml:space="preserve">
+    <value>Auto (system)</value>
+  </data>
+  <data name="OptLangRu" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="OptLangEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangRestartNote" xml:space="preserve">
+    <value>(language applies after restart)</value>
+  </data>
+</root>

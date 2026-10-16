@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="WindowTitle" xml:space="preserve">
+    <value>VRify — 2D → VR SBS 180</value>
+  </data>
+  <data name="GroupFiles" xml:space="preserve">
+    <value>Файлы</value>
+  </data>
+  <data name="LblInput" xml:space="preserve">
+    <value>Вход:</value>
+  </data>
+  <data name="LblOutput" xml:space="preserve">
+    <value>Выход:</value>
+  </data>
+  <data name="BtnBrowse" xml:space="preserve">
+    <value>Обзор…</value>
+  </data>
+  <data name="GroupStereo" xml:space="preserve">
+    <value>Настройки стерео</value>
+  </data>
+  <data name="LblStrength" xml:space="preserve">
+    <value>Сила глубины:</value>
+  </data>
+  <data name="LblSmoothing" xml:space="preserve">
+    <value>Сглаживание:</value>
+  </data>
+  <data name="LblSmoothingHint" xml:space="preserve">
+    <value>(против мерцания, 0 = максимум стерео)</value>
+  </data>
+  <data name="ChkHevc" xml:space="preserve">
+    <value>HEVC (H.265)</value>
+  </data>
+  <data name="PresetSoft" xml:space="preserve">
+    <value>Слабо</value>
+  </data>
+  <data name="PresetNormal" xml:space="preserve">
+    <value>Стандарт</value>
+  </data>
+  <data name="PresetStrong" xml:space="preserve">
+    <value>Сильно</value>
+  </data>
+  <data name="GroupProjection" xml:space="preserve">
+    <value>Проекция</value>
+  </data>
+  <data name="LblFormat" xml:space="preserve">
+    <value>Формат:</value>
+  </data>
+  <data name="OptFlatSbs" xml:space="preserve">
+    <value>Плоский SBS (экран)</value>
+  </data>
+  <data name="OptVr180" xml:space="preserve">
+    <value>VR180 equirect (очки)</value>
+  </data>
+  <data name="LblScreenFov" xml:space="preserve">
+    <value>Экран:</value>
+  </data>
+  <data name="LblFovHint" xml:space="preserve">
+    <value>(поле зрения виртуального экрана)</value>
+  </data>
+  <data name="InfoNoFile" xml:space="preserve">
+    <value>Перетащите видеофайл в окно&#x0a;или нажмите «Обзор…» выше</value>
+  </data>
+  <data name="BtnPreview" xml:space="preserve">
+    <value>Превью</value>
+  </data>
+  <data name="BtnOpenFolder" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
+  <data name="BtnConvert" xml:space="preserve">
+    <value>Конвертировать</value>
+  </data>
+  <data name="BtnCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="StatusReady" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="StatusLoadingModel" xml:space="preserve">
+    <value>Загрузка модели глубины…</value>
+  </data>
+  <data name="StatusModelLoaded" xml:space="preserve">
+    <value>Модель загружена ({0})</value>
+  </data>
+  <data name="StatusPreview" xml:space="preserve">
+    <value>Генерация превью (первый кадр)…</value>
+  </data>
+  <data name="StatusPreviewReadyVr180" xml:space="preserve">
+    <value>Превью VR180 готов — {0}×{1}</value>
+  </data>
+  <data name="StatusPreviewReadyFlat" xml:space="preserve">
+    <value>Превью готово — {0}×{1} (левый = оригинал, правый = синтез)</value>
+  </data>
+  <data name="StatusConverting" xml:space="preserve">
+    <value>Конвертация…</value>
+  </data>
+  <data name="StatusFrameProgress" xml:space="preserve">
+    <value>Кадр {0}/{1} • {2:0.0}% • {3:0.0} fps</value>
+  </data>
+  <data name="StatusFrameProgressExtra" xml:space="preserve">
+    <value>Кадр {0}/{1} • {2:0.0}% • {3:0.0} fps • прошло {4} • осталось {5}</value>
+  </data>
+  <data name="StatusDone" xml:space="preserve">
+    <value>Готово за {0}: {1}</value>
+  </data>
+  <data name="StatusCancelled" xml:space="preserve">
+    <value>Отменено</value>
+  </data>
+  <data name="StatusError" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="StatusNoFileToOpen" xml:space="preserve">
+    <value>Нет файла для открытия</value>
+  </data>
+  <data name="LoadedFile" xml:space="preserve">
+    <value>Загружено: {0}</value>
+  </data>
+  <data name="OpenFolderError" xml:space="preserve">
+    <value>Не удалось открыть проводник</value>
+  </data>
+  <data name="PreviewError" xml:space="preserve">
+    <value>Ошибка превью</value>
+  </data>
+  <data name="ConvertError" xml:space="preserve">
+    <value>Ошибка конвертации</value>
+  </data>
+  <data name="FirstFrameReadError" xml:space="preserve">
+    <value>Не удалось прочитать первый кадр</value>
+  </data>
+  <data name="GroupLanguage" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="LblLanguage" xml:space="preserve">
+    <value>Интерфейс:</value>
+  </data>
+  <data name="OptLangAuto" xml:space="preserve">
+    <value>Авто (системный)</value>
+  </data>
+  <data name="OptLangRu" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="OptLangEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangRestartNote" xml:space="preserve">
+    <value>(язык применяется после перезапуска)</value>
+  </data>
+</root>

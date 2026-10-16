@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using VRify.App.Resources;
 using VRify.Core;
 
 namespace VRify.App;
@@ -19,8 +20,12 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
+        // Apply the saved language *before* InitializeComponent so all x:Static
+        // resource lookups use the right culture on the very first render.
+        var boot = UserSettings.Load();
+        Strings.ApplyCulture(boot.Language);
         InitializeComponent();
-        Loaded += (_, _) => ApplySettings(UserSettings.Load());
+        Loaded += (_, _) => ApplySettings(boot);
     }
 
     /// <summary>
@@ -32,10 +37,10 @@ public partial class MainWindow : Window
     private VrConverter GetConverter()
     {
         if (_converter != null) return _converter;
-        StatusText.Text = "Загрузка модели глубины…";
+        StatusText.Text = Strings.StatusLoadingModel;
         var model = VrConverter.FindModel();
         _converter = new VrConverter(model);
-        StatusText.Text = $"Модель загружена ({_converter.Provider})";
+        StatusText.Text = string.Format(Strings.StatusModelLoaded, _converter.Provider);
         return _converter;
     }
 
@@ -93,7 +98,7 @@ public partial class MainWindow : Window
             : (Path.GetDirectoryName(path) ?? "");
         var suffix = ProjectionCombo.SelectedIndex == 1 ? "_VR180_SBS" : "_flatSBS";
         OutputBox.Text = Path.Combine(dir, $"{name}{suffix}.mp4");
-        StatusText.Text = $"Загружено: {Path.GetFileName(path)}";
+        StatusText.Text = string.Format(Strings.LoadedFile, Path.GetFileName(path));
         UpdateButtons();
     }
 
@@ -113,7 +118,7 @@ public partial class MainWindow : Window
             : (!string.IsNullOrWhiteSpace(InputBox.Text) && File.Exists(InputBox.Text) ? InputBox.Text : null);
         if (path == null)
         {
-            StatusText.Text = "Нет файла для открытия";
+            StatusText.Text = Strings.StatusNoFileToOpen;
             return;
         }
         try
@@ -122,9 +127,37 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Не удалось открыть проводник",
+            MessageBox.Show(this, ex.Message, Strings.OpenFolderError,
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+    }
+
+    /// <summary>
+    /// Save the chosen language to settings and flag the change for the next launch.
+    /// WPF cannot swap strings inside a live XAML tree once it has been rendered,
+    /// so the change only takes effect on restart.
+    /// </summary>
+    private void Language_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        if (LanguageCombo == null || LanguageCombo.SelectedItem is not ComboBoxItem item) return;
+        if (item.Tag is not string tag) return;
+        _settings.Language = tag;
+        _settings.Save();
+        // Update the LangHint visibility based on whether the change actually takes effect.
+        if (LangHint != null) LangHint.Visibility = Visibility.Visible;
+    }
+
+    private void SetLanguageSelection(string lang)
+    {
+        for (int i = 0; i < LanguageCombo.Items.Count; i++)
+        {
+            if (LanguageCombo.Items[i] is ComboBoxItem ci && ci.Tag is string s && s == lang)
+            {
+                LanguageCombo.SelectedIndex = i;
+                return;
+            }
+        }
+        LanguageCombo.SelectedIndex = 0;   // auto
     }
 
     private void Setting_Changed(object sender, RoutedPropertyChangedEventArgs<double> e) => RefreshLabels();
@@ -139,6 +172,9 @@ public partial class MainWindow : Window
         HevcCheck.IsChecked = s.Hevc;
         ProjectionCombo.SelectedIndex = s.Mode == StereoMode.Vr180 ? 1 : 0;
         FovSlider.Value = s.ScreenFovDeg;
+        SetLanguageSelection(s.Language);
+        // The hint is only shown if the user actively changed language in this session.
+        if (LangHint != null) LangHint.Visibility = Visibility.Collapsed;
         // Restore file paths and window placement.
         if (!string.IsNullOrWhiteSpace(s.LastInputPath) && File.Exists(s.LastInputPath))
             InputBox.Text = s.LastInputPath;
@@ -252,7 +288,7 @@ public partial class MainWindow : Window
     private async void Preview_Click(object sender, RoutedEventArgs e)
     {
         if (_busy) return;
-        SetBusy(true, "Генерация превью (первый кадр)…");
+        SetBusy(true, Strings.StatusPreview);
         try
         {
             var input = InputBox.Text;
@@ -267,21 +303,21 @@ public partial class MainWindow : Window
                 var frame = new byte[info.Width * info.Height * 3];
                 using var reader = new FrameReader(input, info.Width, info.Height);
                 if (reader.ReadFrame(frame) != frame.Length)
-                    throw new InvalidOperationException("Не удалось прочитать первый кадр");
+                    throw new InvalidOperationException(Strings.FirstFrameReadError);
                 var r = conv.ProcessPreviewFrame(frame, info.Width, info.Height, settings);
                 return (r.Sbs, r.Width, r.Height);
             });
 
             PreviewImage.Source = ToBitmapSource(sbs, pw, ph);
             StatusText.Text = settings.Mode == StereoMode.Vr180
-                ? $"Превью VR180 готов — {pw}×{ph}"
-                : $"Превью готово — {pw}×{ph} (левый = оригинал, правый = синтез)";
+                ? string.Format(Strings.StatusPreviewReadyVr180, pw, ph)
+                : string.Format(Strings.StatusPreviewReadyFlat, pw, ph);
             InfoText.Visibility = Visibility.Collapsed;
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Ошибка превью", MessageBoxButton.OK, MessageBoxImage.Error);
-            StatusText.Text = "Ошибка";
+            MessageBox.Show(this, ex.Message, Strings.PreviewError, MessageBoxButton.OK, MessageBoxImage.Error);
+            StatusText.Text = Strings.StatusError;
         }
         finally { SetBusy(false); }
     }
@@ -298,15 +334,15 @@ public partial class MainWindow : Window
 
         _cts = new CancellationTokenSource();
         _convertStart = DateTime.UtcNow;
-        SetBusy(true, "Конвертация…");
+        SetBusy(true, Strings.StatusConverting);
         var progress = new Progress<ConversionProgress>(p =>
         {
             ProgressBar.Value = p.Percent;
             var elapsed = (DateTime.UtcNow - _convertStart).TotalSeconds;
             var eta = p.Fps > 0.1 ? TimeSpan.FromSeconds((p.FramesTotal - p.FramesDone) / p.Fps) : TimeSpan.Zero;
-            StatusText.Text =
-                $"Кадр {p.FramesDone}/{p.FramesTotal} • {p.Percent:0.0}% • {p.Fps:0.0} fps" +
-                (elapsed > 2 ? $" • прошло {Format(elapsed)} • осталось {Format(eta.TotalSeconds)}" : "");
+            StatusText.Text = elapsed > 2
+                ? string.Format(Strings.StatusFrameProgressExtra, p.FramesDone, p.FramesTotal, p.Percent, p.Fps, Format(elapsed), Format(eta.TotalSeconds))
+                : string.Format(Strings.StatusFrameProgress, p.FramesDone, p.FramesTotal, p.Percent, p.Fps);
         });
 
         try
@@ -318,12 +354,12 @@ public partial class MainWindow : Window
 
             ProgressBar.Value = 100;
             var dur = (DateTime.UtcNow - _convertStart).TotalSeconds;
-            StatusText.Text = $"Готово за {Format(dur)}: {Path.GetFileName(OutputBox.Text)}";
+            StatusText.Text = string.Format(Strings.StatusDone, Format(dur), Path.GetFileName(OutputBox.Text));
             UpdateButtons();
         }
         catch (OperationCanceledException)
         {
-            StatusText.Text = "Отменено";
+            StatusText.Text = Strings.StatusCancelled;
             try { File.Delete(OutputBox.Text); } catch { /* partial file */ }
         }
         catch (Exception ex)
@@ -341,9 +377,9 @@ public partial class MainWindow : Window
                     $"fov={FovSlider.Value:0} mode={(ProjectionCombo.SelectedIndex == 1 ? "VR180" : "FlatSBS")} hevc={HevcCheck.IsChecked}\n");
             }
             catch { /* never block the user dialog */ }
-            MessageBox.Show(this, $"{ex.Message}\n\nЛог: {Path.Combine(Path.GetTempPath(), "vrify_error.log")}",
-                "Ошибка конвертации", MessageBoxButton.OK, MessageBoxImage.Error);
-            StatusText.Text = "Ошибка";
+            MessageBox.Show(this, $"{ex.Message}\n\nLog: {Path.Combine(Path.GetTempPath(), "vrify_error.log")}",
+                Strings.ConvertError, MessageBoxButton.OK, MessageBoxImage.Error);
+            StatusText.Text = Strings.StatusError;
         }
         finally
         {

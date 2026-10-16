@@ -22,6 +22,9 @@ public sealed class UserSettings
 
     public double ScreenFovDeg { get; set; } = 110.0;
 
+    // Interface language: "auto" (follow OS), "ru", or "en". Applied at startup.
+    public string Language { get; set; } = "auto";
+
     // Last-used file paths (sticky across launches).
     public string? LastInputPath { get; set; }
     public string? LastOutputPath { get; set; }
