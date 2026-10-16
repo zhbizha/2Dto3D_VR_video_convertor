@@ -56,6 +56,50 @@ expect miracles on inherently flat material.
 * Real-world footage: vlogs, music videos, nature documentaries,
   POV/action camera, older pre-2010 films with deeper staging
 
+## Output format
+
+VRify produces one of two layouts, chosen in the UI or CLI:
+
+* **Flat side-by-side (SBS)** — left eye on the left half, right eye on the
+  right half, no black borders. Aspect ratio is the same as the source.
+  Aspect 16:9 source → 32:9 SBS, still played as a single wide frame by
+  standard players; for VR players pick the **Side-by-Side (SBS)** layout.
+* **VR180 equirectangular SBS** — square per eye, 180° lon × 180° lat.
+  Full SBS frame is exactly 2:1 (e.g. 3840×1920, 4320×2160). For VR players
+  pick the **180 SBS / Equirectangular** layout. The user-chosen FOV
+  (default 110°) controls how much of the equirect is filled; values
+  below 180° leave a black border on the sides.
+
+Per-eye size is computed from the source height (capped to keep files
+playable on phone VR):
+
+* Flat SBS: width = 2 × source width, height = source height
+* VR180:   eye size = 2 × source height (capped to 2160 px), so output is
+           2 × 2160 × 2160 = **4320×2160** for any source ≥ 1080 high
+
+### Concrete examples
+
+| Source resolution | Output (Flat SBS) | Output (VR180 SBS) |
+|---|---|---|
+| 1280×720 (HD) | 2560×720 | 2880×1440 |
+| 1920×1080 (FullHD) | 3840×1080 | 4320×2160 |
+| 2560×1440 (QHD) | 5120×1440 | 4320×2160 *(height capped)* |
+| 3840×2160 (4K UHD) | 7680×2160 | 4320×2160 *(height capped)* |
+| 720×304 *(SD letterbox)* | 1440×304 | 608×608 |
+
+Note the last row: 720×304 (a typical 2.35:1 SD rip) becomes 608×608 in
+VR180 — *smaller than the source*. This is the height-capping kicking in.
+VR180 output resolution is determined by `eyeSize = 2 × height`, so very
+short sources produce tiny VR180 files. Flat SBS doesn't have this issue
+and preserves the source aspect.
+
+### Container & codec
+
+* Container: **MP4** (Matroska/MKV available in the CLI)
+* Codec: **HEVC (H.265)** by default, switchable to H.264 in the UI/CLI
+* Audio: pass-through from source (no re-encode, no resample)
+* Frame rate: pass-through
+
 ## Installation
 
 Download the latest installer from the [Releases](../../releases) page.
